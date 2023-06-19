@@ -1,0 +1,5 @@
+flutter:
+  assets:
+    - assets/rock.png
+    - assets/paper.png
+    - assets/scissors.png

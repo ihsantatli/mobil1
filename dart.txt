@@ -1,0 +1,112 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() {
+  runApp(TasKagitMakasOyunu());
+}
+
+class TasKagitMakasOyunu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Taş-Kağıt-Makas Oyunu',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: OyunEkrani(),
+    );
+  }
+}
+
+class OyunEkrani extends StatefulWidget {
+  @override
+  _OyunEkraniState createState() => _OyunEkraniState();
+}
+
+class _OyunEkraniState extends State<OyunEkrani> {
+  String kullaniciSecim;
+  String bilgisayarSecim;
+  String sonuc;
+
+  Random random = Random();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Taş-Kağıt-Makas Oyunu'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Kullanıcı: $kullaniciSecim',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () => oyunSeciminiYap('taş'),
+                  child: Image.asset(
+                    'assets/rock.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => oyunSeciminiYap('kağıt'),
+                  child: Image.asset(
+                    'assets/paper.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => oyunSeciminiYap('makas'),
+                  child: Image.asset(
+                    'assets/scissors.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Bilgisayar: $bilgisayarSecim',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            Text(
+              sonuc ?? '',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void oyunSeciminiYap(String secim) {
+    setState(() {
+      kullaniciSecim = secim;
+      int rastgeleIndex = random.nextInt(3);
+      List<String> secenekler = ['taş', 'kağıt', 'makas'];
+      bilgisayarSecim = secenekler[rastgeleIndex];
+      sonuc = oyunSonucunuHesapla(secim, bilgisayarSecim);
+    });
+  }
+
+  String oyunSonucunuHesapla(String kullaniciSecim, String bilgisayarSecim) {
+    if (kullaniciSecim == bilgisayarSecim) {
+      return 'Berabere! Tekrar deneyin.';
+    } else if ((kullaniciSecim == 'taş' && bilgisayarSecim == 'makas') ||
+        (kullaniciSecim == 'kağıt' && bilgisayarSecim == 'taş') ||
+        (kullaniciSecim == 'makas' && bilgisayarSecim == 'kağıt')) {
+      return 'Tebrikler! Kazandınız.';
+    } else {
+      return 'Maalesef kaybettiniz. Daha sonra tekrar deneyin.';
+    }
+  }
+}
